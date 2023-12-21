@@ -12,9 +12,10 @@ class sal_client (
   $basic_auth,
   $payload_organization,
   $http_username,
-  $http_password
+  $http_password,
+  $report_puppet_state,
 ){
-  case $facts['os']['name'] {
+  case $facts['os']['family'] {
     'Darwin': {
       class {'sal_client::install': }
       -> class {'sal_client::config': }
@@ -23,6 +24,10 @@ class sal_client (
     }
     'Windows': {
       class {'sal_client::windows_install': }
+      -> Class['sal_client']
+    }
+    'Debian': {
+      class {'sal_client::debian_install': }
       -> Class['sal_client']
     }
   }
